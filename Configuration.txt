@@ -1,0 +1,140 @@
+┌──(root㉿kali)-[/home/kali]
+└─# ufw status
+Command 'ufw' not found, but can be installed with:
+apt install ufw
+Do you want to install it? (N/y)y
+apt install ufw
+Installing:                     
+  ufw
+
+Suggested packages:
+  rsyslog
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 1293
+  Download size: 169 kB
+  Space needed: 880 kB / 47.0 GB available
+
+Get:1 http://kali.download/kali kali-rolling/main amd64 ufw all 0.36.2-9 [169 kB]
+Fetched 169 kB in 1s (258 kB/s)
+Preconfiguring packages ...
+Selecting previously unselected package ufw.
+(Reading database ... 408899 files and directories currently installed.)
+Preparing to unpack .../archives/ufw_0.36.2-9_all.deb ...
+Unpacking ufw (0.36.2-9) ...
+Setting up ufw (0.36.2-9) ...
+Creating config file /etc/ufw/before.rules with new version
+Creating config file /etc/ufw/before6.rules with new version
+Creating config file /etc/ufw/after.rules with new version
+Creating config file /etc/ufw/after6.rules with new version
+update-rc.d: We have no instructions for the ufw init script.
+update-rc.d: It looks like a non-network service, we enable it.
+Created symlink '/etc/systemd/system/multi-user.target.wants/ufw.service' → '/usr/lib/systemd/system/ufw.service'.
+Processing triggers for kali-menu (2025.1.1) ...
+Processing triggers for man-db (2.13.0-1) ...
+                                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# ufw status
+Status: inactive
+                                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw enable                     
+Firewall is active and enabled on system startup
+                                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw deny 23    
+Rule added
+Rule added (v6)
+                                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw status numbered
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 23                         DENY IN     Anywhere                  
+[ 2] 23 (v6)                    DENY IN     Anywhere (v6)         
+
+┌──(root㉿kali)-[/home/kali]
+└─# ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.230.143  netmask 255.255.255.0  broadcast 192.168.230.255
+        inet6 fe80::fba9:ed1a:844f:a7e9  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:06:3a:c2  txqueuelen 1000  (Ethernet)
+        RX packets 70  bytes 16199 (15.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 74  bytes 7020 (6.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 14  bytes 732 (732.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 14  bytes 732 (732.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+    
+
+root@debian:/home/kali# nmap -p 23 192.168.230.143
+Starting Nmap 7.80 ( https://nmap.org ) at 2025-06-01 08:27 EDT
+Nmap scan report for 192.168.230.143
+Host is up (0.00060s latency).
+
+PORT   STATE    SERVICE
+23/tcp filtered telnet
+MAC Address: 00:0C:29:06:3A:C2 (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.34 seconds
+
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw allow 23
+Rule updated
+Rule updated (v6)                                                                             
+                                                                                                                                                         
+root@debian:/home/kali# nmap -p 23 192.168.230.143
+Starting Nmap 7.80 ( https://nmap.org ) at 2025-06-01 08:27 EDT
+Nmap scan report for 192.168.230.143
+Host is up (0.00055s latency).
+
+PORT   STATE  SERVICE
+23/tcp closed telnet
+MAC Address: 00:0C:29:06:3A:C2 (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.04 seconds
+                                                                           
+                                                                                                                                      
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw allow 22
+Rule updated
+Rule updated (v6)
+                                                             
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw status numbered  
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 23                         ALLOW IN    Anywhere                  
+[ 2] 23/tcp                     ALLOW IN    Anywhere                  
+[ 3] 22                         ALLOW IN    Anywhere                  
+[ 4] 23 (v6)                    ALLOW IN    Anywhere (v6)             
+[ 5] 23/tcp (v6)                ALLOW IN    Anywhere (v6)             
+[ 6] 22 (v6)                    ALLOW IN    Anywhere (v6) 
+
+┌──(root㉿kali)-[/home/kali]
+└─# sudo ufw reset          
+Resetting all rules to installed defaults. Proceed with operation (y|n)? y
+Backing up 'user.rules' to '/etc/ufw/user.rules.20250601_083549'
+Backing up 'before.rules' to '/etc/ufw/before.rules.20250601_083549'
+Backing up 'after.rules' to '/etc/ufw/after.rules.20250601_083549'
+Backing up 'user6.rules' to '/etc/ufw/user6.rules.20250601_083549'
+Backing up 'before6.rules' to '/etc/ufw/before6.rules.20250601_083549'
+Backing up 'after6.rules' to '/etc/ufw/after6.rules.20250601_083549'
+
+
+
+
+
+
+
